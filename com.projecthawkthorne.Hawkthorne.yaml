@@ -57,7 +57,7 @@ modules:
         ICON_OUT='com.projecthawkthorne.Hawkthorne.png'
         for s in {32,64,128,256,512} ; do
           SIZE="${s}x${s}"
-          ffmpeg -y -i "${ICON_IN}" -update 1 -s "${SIZE}" -sws_flags neighbor "${ICON_OUT}"
+          ffmpeg -y -i "${ICON_IN}" -update 1 -s "${SIZE}" -sws_flags lanczos "${ICON_OUT}"
           install -p -Dm644 "${ICON_OUT}" -t "${FLATPAK_DEST}/share/icons/hicolor/${SIZE}/apps/"
         done
       - install -Dm644 Hawkthorne.metainfo.xml ${FLATPAK_DEST}/share/metainfo/com.projecthawkthorne.Hawkthorne.metainfo.xml
