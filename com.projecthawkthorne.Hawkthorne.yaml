@@ -1,6 +1,6 @@
 app-id: com.projecthawkthorne.Hawkthorne
 runtime: org.freedesktop.Platform
-runtime-version: '25.08'
+runtime-version: &runtime-version '26.08'
 sdk: org.freedesktop.Sdk
 command: Hawkthorne.sh
 finish-args:
@@ -10,7 +10,12 @@ finish-args:
   - --device=dri
   - --socket=pulseaudio
 cleanup:
-  - /lib/*.la
+  - /include
+  - /lib/pkgconfig
+  - /share/doc
+  - /share/man
+  - '*.la'
+  - '*.a'
 modules:
   - name: love2d
     sources:
@@ -24,12 +29,8 @@ modules:
         - type: archive
           url: https://downloads.sourceforge.net/project/modplug-xmms/libmodplug/0.8.9.0/libmodplug-0.8.9.0.tar.gz
           sha256: 457ca5a6c179656d66c01505c0d95fafaead4329b9dbaa0f997d00a3508ad9de
-        cleanup:
-          - /include
-          - /lib/pkgconfig
     cleanup:
       - /share/applications
-      - /share/man
       - /share/mime
       - /share/pixmaps
   - name: hawkthorne
@@ -50,9 +51,9 @@ modules:
         url: https://github.com/hawkthorne/hawkthorne-journey/raw/6b2c36d6205646fe8d18b11f19c7277c2467616e/templates/linux/Hawkthorne.metainfo.xml
         sha256: 820e32bb135a5f567d3d86a9e0fd99a839fc896899998935afda18911aba859e
     build-commands:
-      - install -Dm644 hawkthorne.love ${FLATPAK_DEST}/hawkthorne/hawkthorne.love
-      - install -Dm755 Hawkthorne-launcher.sh ${FLATPAK_DEST}/bin/Hawkthorne.sh
-      - install -Dm644 love.desktop ${FLATPAK_DEST}/share/applications/com.projecthawkthorne.Hawkthorne.desktop
+      - install -Dm644 hawkthorne.love "${FLATPAK_DEST}/hawkthorne/hawkthorne.love"
+      - install -Dm755 Hawkthorne-launcher.sh "${FLATPAK_DEST}/bin/Hawkthorne.sh"
+      - install -Dm644 love.desktop "${FLATPAK_DEST}/share/applications/com.projecthawkthorne.Hawkthorne.desktop"
       - desktop-file-edit --remove-key=MimeType --set-key=Exec --set-value=Hawkthorne.sh --remove-key=Terminal --set-key=Icon --set-value=com.projecthawkthorne.Hawkthorne --remove-key=NoDisplay ${FLATPAK_DEST}/share/applications/com.projecthawkthorne.Hawkthorne.desktop
       - |
         ICON_IN='hawkthorne.png'
@@ -62,4 +63,4 @@ modules:
           ffmpeg -y -i "${ICON_IN}" -update 1 -s "${SIZE}" -sws_flags lanczos "${ICON_OUT}"
           install -p -Dm644 "${ICON_OUT}" -t "${FLATPAK_DEST}/share/icons/hicolor/${SIZE}/apps/"
         done
-      - install -Dm644 Hawkthorne.metainfo.xml ${FLATPAK_DEST}/share/metainfo/com.projecthawkthorne.Hawkthorne.metainfo.xml
+      - install -Dm644 Hawkthorne.metainfo.xml "${FLATPAK_DEST}/share/metainfo/com.projecthawkthorne.Hawkthorne.metainfo.xml"
